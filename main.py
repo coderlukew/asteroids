@@ -8,8 +8,12 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Asteroids")
     clock = pygame.time.Clock()
-    dt = 0
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+
+    dt = 0
 
 
     running = True
@@ -18,9 +22,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        player.update(dt)
+        #player.update(dt) this should be in the update_group
+        updatable.update(dt)
         screen.fill((0, 0, 0))  # Fill the screen with black
-        player.draw(screen)  # Draw the player
+        for obj in drawable:
+            obj.draw(screen)
+        #player.draw(screen) this should be in the draw_group
         pygame.display.flip()  # Update the display
         clock.tick(60)  # Limit to 60 FPS
         dt = clock.tick(60) / 1000.0
